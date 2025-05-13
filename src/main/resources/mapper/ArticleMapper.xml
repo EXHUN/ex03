@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.ArticleMapper">
+    <resultMap id="articleWithComment" type="com.itheima.pojo.Article">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <select id="selectArticle" parameterType="java.lang.Integer" resultMap="articleWithComment">
+        SELECT A.*
+        FROM t_article A
+        WHERE A.id = #{id}
+    </select>
+
+    <select id="selectCommentList" parameterType="java.lang.Integer" resultType="com.itheima.pojo.Comment">
+        SELECT C.*
+        FROM t_comment C
+        INNER JOIN t_article A
+        ON C.a_id = A.id
+        WHERE A.id = #{id}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultType="com.itheima.pojo.Article">
+        SELECT a.*, c.id AS comment_id, c.author, c.content, c.a_id
+        FROM t_article a
+        LEFT JOIN t_comment c
+        ON c.a_id = a.id
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="articleWithComment">
+        SELECT a.id AS article_id, a.title, a.content,
+               c.id AS comment_id, c.author, c.content AS comment_content, c.a_id
+        FROM t_article a
+        LEFT JOIN t_comment c
+        ON c.a_id = a.id
+    </select>
+
+    <insert id="insertArticle" parameterType="com.itheima.pojo.Article">
+        INSERT INTO t_article (title, content)
+        VALUES (#{title}, #{content})
+    </insert>
+
+    <update id="updateArticle" parameterType="com.itheima.pojo.Article">
+        UPDATE t_article
+        SET content = #{content}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteArticle" parameterType="java.lang.Integer">
+        DELETE FROM t_article
+        WHERE id = #{id}
+    </delete>
+
+    <insert id="insertArticleByColumn">
+        insert into t_article
+        values(null, #{title}, #{content})
+    </insert>
+</mapper>
