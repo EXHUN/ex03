@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itheima.mapper.CustomerMapper">
     <select id="selectCustomer" parameterType="com.itheima.pojo.Customer" resultType="com.itheima.pojo.Customer">
-<!-- <where>元素内的某一个或者多个条件成立时，才会把它拼接为关键字where，否则不添加 -->
+        <!-- <where>元素内的某一个或者多个条件成立时，才会把它拼接为关键字where，否则不添加 -->
         <!-- <trim> 删除多余的关键字
                prefix: 添加前缀
                prefixOverrides: 删除前缀
@@ -12,12 +12,12 @@
 
         SELECT * FROM t_customer
         <trim prefix="WHERE" prefixOverrides="AND">
-        <if test="username != null and username != ''">
-            AND username LIKE CONCAT('%', #{username}, '%')
-        </if>
-        <if test="jobs != null and jobs != ''">
-            AND jobs = #{jobs}
-        </if>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="jobs != null and jobs != ''">
+                AND jobs = #{jobs}
+            </if>
         </trim>
     </select>
 </mapper>
